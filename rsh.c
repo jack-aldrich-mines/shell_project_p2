@@ -52,11 +52,9 @@ void* messageListener(void *arg) {
 	// put an end of line at the end of the message
 
 	int fd;
-	int dummyfd;	
 	struct message req;
 
 	fd = open(uName, O_RDONLY);
-	dummyfd = open(uName, O_WRONLY);
 	while (1) {
 		if (read(fd, &req, sizeof(struct message)) !=
 					sizeof(struct message))
@@ -134,15 +132,18 @@ int main(int argc, char **argv) {
 		// if no message is specified, you should print the followingA
  		// printf("sendmsg: you have to enter a message\n");
 
+		char *target = strtok(NULL, " ");
+		if (target == NULL) {
+			printf("sendmsg: you have to specify target user\n");
+			continue;
+		}
+		if ((target - line) + strlen(target) >= strlen(line2)) {
+			printf("sendmsg: you have to enter a message\n");
+		}
 
-
-
-
-
-
-
-
-
+		char *msg = line2 + (target - line) + strlen(target) + 1;
+		sendmsg(uName, target, msg);
+	
 		continue;
 	}
 
